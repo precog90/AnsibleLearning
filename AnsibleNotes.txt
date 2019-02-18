@@ -1,0 +1,74 @@
+Simple
+Powerful
+Developed by Redhat
+Ansible Tower by Redhat is the web based interface for Ansible
+Open Source
+Cental point which controls other parts
+Uses tools such as ssh
+
+=======================
+
+Insalled on Computer(Main Ansible PC) and it communicates with other computers from there
+nothing to install on client computer, just python and ssh is needed.
+Some stuff can still be done using just ssh
+Since it uses so much ssh, plan ssh access username(consistent across clients), sudo(good) or root(bad), passwordless keys or ssh-agent
+After installing ansible, quick check:
+
+amrinder@:~$ ansible localhost -m  ping
+ [WARNING]: provided hosts list is empty, only localhost is available. Note
+that the implicit localhost does not match 'all'
+
+localhost | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+amrinder@:~$ 
+
+for SSH: desklabadmin username across all the clients
+
+=========================
+
+Topology:
+
+amrinder-HP-t620-Quad-Core-TC : Ansible Central Point 192.168.160.35
+desklab-netscreen: Spoke 1 [Password Bassed Authentication] 192.168.160.1
+desklab-fortigate: Spoke 2 [Public Private Key Pair] 192.168.160.10
+desklab-centos: Spoke 3 [Public Private Key Pair] 192.168.160.36
+
+Escalate privelege on the clients so that we can use sudo with it asking for the password.
+
+sudo visudo
+desklabadmin ALL=(ALL) NOPASSWD: ALL
+
+This will allow desklabadmin to run priveleged commands using sudo but will not ask for the password.
+===========================
+
+Ansible Hosts: /etc/ansible/hosts 
+
+[firewalls]
+desklab-fortigate
+desklab-netscreen
+[servers]
+desklab-centos
+
+amrinder@:~$ ansible -m ping servers
+desklab-centos | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+
+
+amrinder@:~$ ansible -m raw -a '/usr/bin/uptime' servers                
+desklab-centos | CHANGED | rc=0 >>
+ 17:50:03 up 39 min,  3 users,  load average: 0.12, 0.06, 0.07
+Shared connection to desklab-centos closed.
+
+-a: action
+
+amrinder@:~$ ansible -m shell -a 'uname -a' servers         
+desklab-centos | CHANGED | rc=0 >>
+Linux desklab-centos 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+
+============================
+
+

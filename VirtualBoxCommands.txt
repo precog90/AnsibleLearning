@@ -1,0 +1,55 @@
+What I did was to enable X11 Forward in the /etc/ssh/sshd_config
+Enable X11 Forwarding in SecureCRT
+Download Ximing to act as X11 Server on the local machine
+VirtualBox & it will show virtualbox GUI. 
+From GUI i installed everything. 
+To start it as headless VM:
+
+amrinder@:~/VirtualBox VMs$ VBoxManage startvm desklab-centos --type headless 
+Waiting for VM "desklab-centos" to power on...
+VM "desklab-centos" has been successfully started.
+amrinder@:~/VirtualBox VMs$ 
+amrinder@:~/VirtualBox VMs$ 
+
+
+
+=====================================================
+These are the commands i played with while setting things up.
+
+Useful URL: https://www.linuxtechi.com/manage-virtualbox-virtual-machines-command-line/
+
+
+sudo apt install virtualbox
+vboxmanage list ostypes
+VBoxManage createvm --name desklab-centos --ostype RedHat_64 --register
+VBoxManage modifyvm desklab-centos --bridgeadapter1 vmnet1
+VBoxManage modifyvm desklab-centos --nic1 bridged
+VBoxManage modifyvm desklab-centos --memory 1024
+VBoxManage createhd --filename ~/VirtualBox/desklab-centos.vdi --size 10000 --format VDI
+
+VBoxManage storagectl desklab-centos --name "IDE Controller" --add ide --controller PIIX4
+VBoxManage storageattach desklab-centos --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium /home/amrinder/osimages/CentOS-7-x86_64-Minimal-1810.iso
+
+VBoxManage startvm desklab-centos
+
+amrinder@:~/VirtualBox VMs$ VBoxManage startvm desklab-centos --type headless 
+
+
+amrinder@:~$ sudo VBoxManage createvm --name desklab-centos --ostype RedHat_64 --register
+Virtual machine 'desklab-centos' is created and registered.
+UUID: f34b968a-08fb-47ef-8629-5acec9f098a6
+Settings file: '/root/VirtualBox VMs/desklab-centos/desklab-centos.vbox'
+amrinder@:~$ 
+amrinder@:~$ 
+amrinder@:~$ 
+amrinder@:~$ 
+
+amrinder@:~$ 
+amrinder@:~$ sudo VBoxManage modifyvm desklab-centos --bridgeadapter1 vmnet1
+amrinder@:~$ sudo VBoxManage modifyvm desklab-centos --nic1 bridged
+amrinder@:~$ sudo VBoxManage modifyvm desklab-centos --memory 1024
+amrinder@:~$ sudo VBoxManage createhd --filename ~/VirtualBox/desklab-centos.vdi --size 10000 --format VDI
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+Medium created. UUID: f3f47f77-f585-4343-88a5-70f554d2581c
+amrinder@:~$ sudo VBoxManage storagectl desklab-centos --name "IDE Controller" --add ide --controller PIIX4
+
