@@ -1,0 +1,10 @@
+---
+
+- hosts: ubuntu
+  become: yes
+  tasks:
+   - name: do a uname
+     shell: uname -a > ~/results.txt
+   - name: whoami
+     shell: whoami >> ~/results.txt
+
