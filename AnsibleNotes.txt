@@ -71,4 +71,125 @@ Linux desklab-centos 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018 x8
 
 ============================
 
+Simple and Powerful Ad-Hoc Tool [Running commands remotely]
+
+amrinder@:~$ ansible servers -a 'whoami'
+desklab-centos-kibana-data | CHANGED | rc=0 >>
+root
+
+desklab-centos-kibana-nodata | CHANGED | rc=0 >>
+root
+
+desklab-centos | CHANGED | rc=0 >>
+desklabadmin
+
+To become root, use -b option
+
+amrinder@:~$ ansible servers -b -a 'whoami'
+desklab-centos-kibana-data | CHANGED | rc=0 >>
+root
+
+desklab-centos-kibana-nodata | CHANGED | rc=0 >>
+root
+
+desklab-centos | CHANGED | rc=0 >>
+root
+
+amrinder@:~$ 
+
+Ansible defaults to a command module, if you dont specify the module. 
+Hundreds of modules in ansible
+
+apt module for ubuntu
+yum module for centos
+
+amrinder@:~$ ansible servers -b -m yum -a 'name=httpd state=present'
+desklab-centos-kibana-data | SUCCESS => {
+    "ansible_facts": {
+        "pkg_mgr": "yum"
+    }, 
+    "changed": false, 
+    "msg": "", 
+    "rc": 0, 
+    "results": [
+        "httpd-2.4.6-88.el7.centos.x86_64 providing httpd is already installed"
+    ]
+}
+desklab-centos-kibana-nodata | SUCCESS => {
+    "ansible_facts": {
+        "pkg_mgr": "yum"
+    }, 
+    "changed": false, 
+    "msg": "", 
+    "rc": 0, 
+    "results": [
+        "httpd-2.4.6-88.el7.centos.x86_64 providing httpd is already installed"
+    ]
+}
+desklab-centos | SUCCESS => {
+    "ansible_facts": {
+        "pkg_mgr": "yum"
+    }, 
+    "changed": false, 
+    "msg": "", 
+    "rc": 0, 
+    "results": [
+        "httpd-2.4.6-88.el7.centos.x86_64 providing httpd is already installed"
+    ]
+}
+
+amrinder@:~$ ansible desklab-centos-kibana-nodata -m service  -a 'name=kibana enabled=true'
+
+====================================
+
+command module(default): Directly runs those commands (safest)
+- does not use shell(Bash/sh)
+- can't use pipes or redirects
+
+ansible -m command -a 'echo "hello" > ~/abc.txt' servers
+
+shell module (less safest)
+- support pipes/redirects
+- affected by bash settings
+
+ ansible -m shell -a 'echo "hello" > ~/abc.txt' servers 
+
+raw module (least safest)
+- just sends commands over ssh
+- does not python
+- no abstraction
+
+File Module:
+
+ansible -m file -a 'path=/root/temp.txt state=absent' servers
+
+Copy Module:
+
+amrinder@:~$ ansible -b -m copy -a 'src=/etc/hosts dest=/etc/hosts' desklab-centos
+desklab-centos | CHANGED => {
+    "changed": true, 
+    "checksum": "f07eca16c7ca13da4a2574aaf46aa13db25d8ce4", 
+    "dest": "/etc/hosts", 
+    "gid": 0, 
+    "group": "root", 
+    "md5sum": "a502344cad3fd07275f2d9d833289399", 
+    "mode": "0644", 
+    "owner": "root", 
+    "secontext": "system_u:object_r:net_conf_t:s0", 
+    "size": 382, 
+    "src": "/home/desklabadmin/.ansible/tmp/ansible-tmp-1550865027.26-51322606162434/source", 
+    "state": "file", 
+    "uid": 0
+}
+
+
+When copying files like /etc/hosts, it is not possible to change the entries depending on where the file is being copied(dns for 127.0.0.1). That is why ansible in adhoc mode is powerful but limited.For do actions based on facts of computers, playbooks come into play. 
+
+=================================
+
+
+
+
+
+
 
