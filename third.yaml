@@ -1,0 +1,10 @@
+---
+
+- hosts: servers
+  become: yes
+  vars: 
+   - var1: cool stuff here
+   - var2: cool stuff there
+  tasks:
+   - name: echo stuff
+     shell: echo " {{ var1 }} is var1, but var2 is {{ var2 }} and OS Family for this beast is {{ ansible_os_family }}" 
