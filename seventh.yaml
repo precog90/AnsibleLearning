@@ -1,0 +1,15 @@
+---
+
+- hosts: ubuntu
+  become: yes
+  
+  tasks: 
+   - name: Install Stuff
+#     apt: name= {{ item }} update_cache=yes state=latest
+     debug: msg={{ item }}
+     with_file:
+     - first.yaml
+     - second.yaml
+   - name: Sequence Loop
+     debug: msg= {{ item }}
+     with_sequence: start=1 end=10

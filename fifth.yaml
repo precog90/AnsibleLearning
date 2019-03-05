@@ -1,0 +1,15 @@
+--- 
+
+- hosts: servers
+  become: yes
+  
+  tasks:
+   - name: install apache2
+     apt: name=apache2 state=absent
+     when: ansible_os_family=="Debian"
+     
+   - name: Install httpd
+     yum: name=httpd state=absent
+     when: ansible_os_family=="RedHat"
+     
+

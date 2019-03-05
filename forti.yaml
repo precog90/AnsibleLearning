@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  tasks:
+   - name: Backup
+     fortios_config:
+      host: desklab-fortigate
+      username: admin
+      password: Password!
+      backup: yes
+      backup_path: "/home/amrinder/AnsibleLearning/"
+      filter: "firewall address"
