@@ -1,0 +1,44 @@
+---
+- name: Install Junos OS 
+  hosts: srx
+  roles:
+   - Juniper.junos
+  connection: local
+  gather_facts: no
+  vars:
+   OS_version: "12.1X46D82"
+   OS_package: "junos-srxsme-12.1X46-D82-domestic.tgz"
+   pkg_dir: "/home/amrinder/Downloads/"
+   log_dir: "/home/amrinder/AnsibleLearning/Juniper/logs"
+   netconf_port: 830 
+   wait_time: 3600
+   
+  tasks: 
+   - name: Checking Netconf Connectivity
+     wait_for:
+      host: "{{ inventory_hostname }}"
+      port: "{{ netconf_port }}"
+      timeout: 20
+
+   - name: Install Junos OS Package 
+     juniper_junos_software:
+      version: " {{ OS_version }}"
+      local_package: "{{ pkg_dir }}/{{ OS_package }}"
+      reboot: true
+      logfile: "{{ log_dir }}/firmwareupgrade.log"
+     register: sw
+     notify: wait_reboot
+
+   - name: Print Response
+     debug: 
+      var: sw
+
+  handlers:
+   - name: wait_reboot
+     wait_for:
+      host: "{{ inventory_hostname}}"
+      port: " {{ netconf_port }}"
+      timeout: 20
+     when: not sw.check_mode
+    
+
