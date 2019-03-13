@@ -1,0 +1,9 @@
+---
+#This file will be included in tenth.yaml
+- hosts: ubuntu
+  become: yes
+
+  tasks: Install Apache
+  apt: name=apache2 state=latest update_cache=yes
+
+

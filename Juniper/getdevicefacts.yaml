@@ -1,0 +1,18 @@
+---
+
+- name: Get Device Facts
+  vars:
+   savedir: "/home/amrinder/AnsibleLearning/Juniper"
+  hosts: srx
+  roles:
+   - Juniper.junos
+  connection: local
+  gather_facts: no
+
+  tasks:
+   - name: Retrieve Facts From Device Running Junos OS
+     juniper_junos_facts:
+      savedir: "{{ savedir }}"
+   - name: Print Version
+     debug: 
+      msg: " {{ junos }}"

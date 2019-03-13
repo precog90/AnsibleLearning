@@ -1,11 +1,21 @@
 ---
+
 - hosts: localhost
+  vars:
+   host: "desklab-fortigate"
+   username: "admin"
+   password: "Password!"
   tasks:
-   - name: Backup
-     fortios_config:
-      host: desklab-fortigate
-      username: admin
-      password: Password!
-      backup: yes
-      backup_path: "/home/amrinder/AnsibleLearning/"
-      filter: "firewall address"
+  - name: Static
+    fortiosconfig:
+     action: "set"
+     host:  "{{  host }}"
+     username: "{{ username }}"
+     password: "{{ password }}"
+     config: "router static"
+     https: false
+     config_parameters:
+      seq-num: "34"
+      dst: "1.1.1.1 255.255.255.255"
+      device: "wan1"
+      gateway: "172.28.129.1"

@@ -1,0 +1,26 @@
+<chassis-inventory>
+<chassis style="inventory">
+<name>Chassis</name>
+<serial-number>AT2712AF0378</serial-number>
+<description>SRX100B</description>
+<chassis-module>
+<name>Routing Engine</name>
+<version>REV 19</version>
+<part-number>750-021773</part-number>
+<serial-number>AT2712AF0378</serial-number>
+<description>RE-SRX100B</description>
+</chassis-module>
+<chassis-module>
+<name>FPC 0</name>
+<description>FPC</description>
+<chassis-sub-module>
+<name>PIC 0</name>
+<description>8x FE Base PIC</description>
+</chassis-sub-module>
+</chassis-module>
+<chassis-module>
+<name>Power Supply 0</name>
+</chassis-module>
+</chassis>
+</chassis-inventory>
+
