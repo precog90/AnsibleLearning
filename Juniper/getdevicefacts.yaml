@@ -2,7 +2,7 @@
 
 - name: Get Device Facts
   vars:
-   savedir: "/home/amrinder/AnsibleLearning/Juniper"
+   savedir: "/home/amrinder/AnsibleLearning/Juniper/factfiles"
   hosts: srx
   roles:
    - Juniper.junos
@@ -15,4 +15,4 @@
       savedir: "{{ savedir }}"
    - name: Print Version
      debug: 
-      msg: " {{ junos }}"
+      msg: " {{ junos.version }}"
