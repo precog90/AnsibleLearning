@@ -6,7 +6,7 @@
   connection: local
   gather_facts: no
   vars:
-   OS_version: "12.1X46D82"
+   OS_version: "12.1X46-D82"
    OS_package: "junos-srxsme-12.1X46-D82-domestic.tgz"
    pkg_dir: "/home/amrinder/Downloads/"
    log_dir: "/home/amrinder/AnsibleLearning/Juniper/logs"
@@ -22,12 +22,13 @@
 
    - name: Install Junos OS Package 
      juniper_junos_software:
-      version: " {{ OS_version }}"
+      version: "{{ OS_version }}"
       local_package: "{{ pkg_dir }}/{{ OS_package }}"
       reboot: true
       logfile: "{{ log_dir }}/firmwareupgrade.log"
      register: sw
-     notify: wait_reboot
+     notify: 
+      - wait_reboot
 
    - name: Print Response
      debug: 
@@ -36,9 +37,9 @@
   handlers:
    - name: wait_reboot
      wait_for:
-      host: "{{ inventory_hostname}}"
-      port: " {{ netconf_port }}"
-      timeout: 20
+      host: "{{ inventory_hostname }}"
+      port: "{{ netconf_port }}"
+      timeout: "{{ wait_time }}" 
      when: not sw.check_mode
     
 
