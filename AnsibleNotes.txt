@@ -8,7 +8,7 @@ Uses tools such as ssh
 
 =======================
 
-Insalled on Computer(Main Ansible PC) and it communicates with other computers from there
+Installed on Computer(Main Ansible PC) and it communicates with other computers from there
 nothing to install on client computer, just python and ssh is needed.
 Some stuff can still be done using just ssh
 Since it uses so much ssh, plan ssh access username(consistent across clients), sudo(good) or root(bad), passwordless keys or ssh-agent
@@ -186,6 +186,148 @@ desklab-centos | CHANGED => {
 When copying files like /etc/hosts, it is not possible to change the entries depending on where the file is being copied(dns for 127.0.0.1). That is why ansible in adhoc mode is powerful but limited.For do actions based on facts of computers, playbooks come into play. 
 
 =================================
+
+--- three dashes indicate it is a yaml file
+
+In YAML, whitespaces are very important
+
+you run the playbook using ansible-playbook command
+
+ansible-playbook first.yaml 
+
+How YAML file looks like:
+
+amrinder@:~/AnsibleLearning$ cat first.yaml 
+---
+
+- hosts: ubuntu
+  become: yes
+  tasks:
+   - name: do a uname
+     shell: uname -a > ~/results.txt
+   - name: whoami
+     shell: whoami >> ~/results.txt
+
+	 
+Become makes it root, when running the command. You can pass this argument from command line when running the playbook as well.
+
+ansible-playbook -b first.yaml 
+
+Visualization of this in python(JSON) looks like this:
+
+[{'become': True,
+  'hosts': 'ubuntu',
+  'tasks': [{'name': 'do a uname', 'shell': 'uname -a > ~/results.txt'},
+            {'name': 'whoami', 'shell': 'whoami >> ~/results.txt'}]}]
+
+
+ansible-playbook -v first.yaml  
+-v flag gives detailed information on what playbook is doing
+
+=============================
+Reference file second.yaml
+Handler: It is a task, but only called if there is a change made and executed only once even if multiple tasks call it.
+ignore_errors: yes -- this will other tasks run even if there are some errors in one task. [No apt for centos machines]
+
+second.yaml
+---
+
+- hosts: servers
+  become: yes
+  tasks:
+   - name: install vsftpd on ubuntu
+     apt: name=vsftpd update_cache=yes state=latest
+     ignore_errors: yes
+     notify: start vsftpd
+   - name: install vsftpd on centos
+     yum: name=vsftpd state=latest
+     ignore_errors: yes
+     notify: start vsftpd
+  handlers:
+   - name: start vsftpd
+     service: name=vsftpd enabled=yes start=started
+
+=============================
+
+Ansible creates variables from the hosts it call FACTS, it is all of the information about the host that we can use inside the playbooks
+In order to see what they are, module in adhoc mode called setup
+
+Reference file third.yaml
+
+To see the list of FACTS about a server: 
+
+ansible ubuntu -m setup
+
+It includes cpu type, os family, ram, ip, cpu cores etc.
+ 
+To filter the results:
+
+ansible ubuntu -m setup -a "filter=*family*"
+ansible ubuntu -m setup -a "filter=*ip*"
+
+==============================
+
+registering variables: result of one particular module become a variables
+
+displaying results:  registered variables output is in JSON 
+
+JSON
+
+Reference file: fourth.yaml
+
+=================================
+
+Reference file: fifth.yaml
+
+when is the keyword which is used in ansible
+
+do something when this 
+do something when that
+do something when blah blah blah
+
+=============================
+
+with_items
+with_file
+with_sequence
+
+Reference file: sixth.yaml seventh.yaml
+
+=============================
+
+Jinja 2
+Variables
+Comments {# #}
+
+Reference file: eighth.yaml
+
+=============================
+
+Ansible Vault - Encrypt playbooks
+When run the playbook, password with text file(--vault-password-file) or enter it manually(--ask-vault-pass).
+
+chmod 400 permissions, password file only readable by the user.
+
+Create the encrypted yaml file using
+
+ansible-vault create test.yaml
+
+It won't be readable to executable untill --vault-password-file or --ask-vault-pass is not passed.
+
+To edit
+
+ansible-vault edit test.yaml
+
+============================
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,53 @@
+===================================================
+Setting up SRX with Ansible for the very first time
+===================================================
+
+**
+Set-up the user with public private key authentication for no prompt login:
+
+set system login user desklabadmin uid 2004
+set system login user desklabadmin class super-user
+set system login user desklabadmin authentication ssh-rsa "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDApahX2x/no99PGr/cFA/oWhARfk7Pz3H7GP5lObcB7Up2jWZ/i6r30mlzxJ/V8s5XyAo9csU2fDjcWI0I4iyvZEitwAGBfTgovtM9WJdTPkcSDLGNr9xWPbBHi7zzezw2AO7pa6EUA1q7MRxwiGjbpsKpuxZEw+9iNPAK8xZBVbeExTGebXODbcZPGzBeH4+glZ2qiQZoBbH69epJB38LSQhEuv8z9e9cLoaeMIXFXlvcRlR5tR4wwktK9zFWclL3U/zJnG/sqHOa51kzv+sbtSwGsB0xib6NrWYKIch7z0sp8qDsjf/9luEK8/h3FbRyBvGKOO/QCAgDniQJbNk/ amrinder@amrinder-HP-t620-Quad-Core-TC"
+
+**
+Disable Host Key Checking in the Ansible Configuration:
+/etc/ansible/ansible.cfg
+
+[defaults]
+host_key_checking = False
+
+Otherwise
+amrinder@:~$ ansible --connection=local -m junos_facts srx
+desklab-srx | FAILED! => {
+    "msg": "Unknown host key [75:b1:bd:00:db:13:fe:1d:5c:4c:4e:ae:f2:6a:ff:d6] for [[desklab-srx]:830]"
+}
+
+**
+On Ansible Netconf(ncclient) is required
+
+amrinder@:~$ ansible --connection=local -m junos_facts srx
+desklab-srx | FAILED! => {
+    "msg": "ncclient is required to use the netconf connection type.\nPlease run pip install ncclient"
+}
+
+** Python libray PyEz aka junos-eznc, jxmlease  is also required
+amrinder@:~/AnsibleLearning/Juniper$ pip install junos-eznc
+amrinder@:~/AnsibleLearning/Juniper$ pip install jxmlease
+
+
+** Test using the inbuilt junos_facts module
+
+amrinder@:~$ ansible --connection=local -m junos_facts srx
+desklab-srx | SUCCESS => {
+    "ansible_facts": {
+        "ansible_net_filesystems": [
+            "/dev/da0s1a", 
+
+** Install Juniper.junos ansible module
+
+amrinder@:~/AnsibleLearning/Juniper$ sudo ansible-galaxy install Juniper.junos
+- downloading role 'junos', owned by Juniper
+- downloading role from https://github.com/Juniper/ansible-junos-stdlib/archive/2.1.0.tar.gz
+- extracting Juniper.junos to /home/amrinder/.ansible/roles/Juniper.junos
+- Juniper.junos (2.1.0) was installed successfully
+
