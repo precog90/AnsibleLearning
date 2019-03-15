@@ -6,8 +6,8 @@
   connection: local
   gather_facts: no
   vars:
-   OS_version: "12.1X46-D82"
-   OS_package: "junos-srxsme-12.1X46-D82-domestic.tgz"
+   OS_version: "12.1X46-D71"
+   OS_package: "junos-srxsme-12.1X46-D71-domestic.tgz"
    pkg_dir: "/home/amrinder/Downloads/"
    log_dir: "/home/amrinder/AnsibleLearning/Juniper/logs"
    netconf_port: 830 

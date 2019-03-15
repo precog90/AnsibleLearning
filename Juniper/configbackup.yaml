@@ -1,0 +1,39 @@
+---
+
+- name: Save configurations from Junos devices to files
+  hosts: srx
+  roles:
+   - Juniper.junos
+  connection: local
+  gather_facts: no
+  
+  vars:
+   log_dir: "/home/amrinder/AnsibleLearning/Juniper/logs" #Tried this, but did not work
+   config_dir: "/home/amrinder/AnsibleLearning/Juniper/configs"
+   date: "{{ ansible_date }}"
+   config_filename: "{{ config_dir }}/{{ inventory_hostname }}-{{ current_date.stdout }}.conf"
+   connection_settings:
+    host: "{{ ansible_host }}"
+
+  tasks:
+   - name: Register Date
+     shell: date +%d-%m-%y 
+     register: current_date
+
+   - name: confirm/create device configuration directory
+     file: 
+      path: "{{ config_dir }}"
+      state: directory
+     run_once: yes
+     delegate_to: localhost
+  
+   - name: save device configuration
+     juniper_junos_config:
+      provider: "{{ connection_settings }}"
+      dest: "{{ config_filename }}"
+      format: text
+      retrieve: committed
+      logdir: "{{ log_dir }}" #Tried this, but did not work
+
+   - name: debug
+     debug: msg={{ current_date.stdout }}
