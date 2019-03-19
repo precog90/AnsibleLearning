@@ -9,6 +9,17 @@ set system login user desklabadmin uid 2004
 set system login user desklabadmin class super-user
 set system login user desklabadmin authentication ssh-rsa "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDApahX2x/no99PGr/cFA/oWhARfk7Pz3H7GP5lObcB7Up2jWZ/i6r30mlzxJ/V8s5XyAo9csU2fDjcWI0I4iyvZEitwAGBfTgovtM9WJdTPkcSDLGNr9xWPbBHi7zzezw2AO7pa6EUA1q7MRxwiGjbpsKpuxZEw+9iNPAK8xZBVbeExTGebXODbcZPGzBeH4+glZ2qiQZoBbH69epJB38LSQhEuv8z9e9cLoaeMIXFXlvcRlR5tR4wwktK9zFWclL3U/zJnG/sqHOa51kzv+sbtSwGsB0xib6NrWYKIch7z0sp8qDsjf/9luEK8/h3FbRyBvGKOO/QCAgDniQJbNk/ amrinder@amrinder-HP-t620-Quad-Core-TC"
 
+** 
+Enable netconf
+
+set system services netconf ssh port 830
+
+Enable it on the interface/security zone
+set security zones security-zone trust interfaces ge-0/0/4.0 host-inbound-traffic system-services netconf
+
+Test it using:
+amrinder@:~/AnsibleLearning/Juniper$ ssh desklabadmin@desklab-srx-tristan -p 830 -s netconf
+
 **
 Disable Host Key Checking in the Ansible Configuration:
 /etc/ansible/ansible.cfg
