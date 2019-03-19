@@ -1,0 +1,28 @@
+---
+
+- name: Transfer files from or to remote devices running Junos
+  hosts: srx
+  gather_facts: no
+  connection: local
+  vars:
+   connection_settings:
+    host: "{{ inventory_hostname }}"
+    username: "desklabadmin"
+
+  tasks:
+   - name: Upload local file to home directory on remote device
+     junos_scp:
+      provider: "{{ connection_settings }}"
+      src: test.txt
+
+   - name: Upload local file to tmp directory on remote device
+     junos_scp:
+      provider: "{{ connection_settings }}"
+      src: test.txt
+      dest: /tmp/
+
+   - name: Download file from remote device
+     junos_scp:
+       provider: "{{ connection_settings }}"
+       src: /cf/var/home/desklabadmin/testsrxfile.txt
+       remote_src: true
