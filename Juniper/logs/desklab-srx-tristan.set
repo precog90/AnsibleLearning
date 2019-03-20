@@ -1,0 +1,6 @@
+
+set system services ssh
+set system services xnm-clear-text
+set system services netconf ssh port 830
+set system services netconf traceoptions file netconf.log
+set system services netconf traceoptions flag all

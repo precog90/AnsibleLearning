@@ -1,0 +1,100 @@
+---
+- name: Manipulate the configuration of Junos devices
+  hosts: srx
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  vars:
+   steadystate_dir: "/home/amrinder/AnsibleLearning/Juniper/configs/steadystateconfigs/"
+  tasks:
+#    - name: Retrieve the committed configuration
+#      juniper_junos_config:
+#        retrieve: 'committed'
+#        diff: false
+#        check: false
+#        commit: false
+#      register: response
+#    - name: Print the lines in the config.
+#      debug:
+#        var: response.config_lines
+
+#    - name: Update hostname using private config mode.
+#      juniper_junos_config:
+#        config_mode: 'private'
+#        load: 'merge'
+#        lines:
+#          - "set system host-name {{ inventory_hostname }}"
+#      register: response
+#    - name: Print the config changes.
+#      debug:
+#        var: response.diff_lines
+
+#    - name: Rollback to the previous config.
+#      juniper_junos_config:
+#        config_mode: 'private'
+#        rollback: 1
+#      register: response
+#    - name: Print the config changes.
+#      debug:
+#        var: response.diff_lines
+
+#    - name: Load override from a file.
+#      juniper_junos_config:
+#        timeout: 60
+#        load: 'override'
+#        src: "{{ steadystate_dir }}/{{ inventory_hostname }}.conf"
+#      register: response
+#    - name: Print the complete response.
+#      debug:
+#        var: response
+
+#    - name: Print diff between current and rollback 3. No check. No commit.
+#      juniper_junos_config:
+#        rollback: 3 
+#        diff: true
+#        check: false
+#        commit: false
+#      register: response
+#    - name: Print the msg.
+#      debug:
+#        var: response
+
+#    - name: Retrieve [edit system services] of current committed config.
+#      juniper_junos_config:
+#        retrieve: 'committed'
+#        filter: 'system/services'
+#        diff: true
+#        check: false
+#        commit: false
+#      register: response
+#    - name: Print the resulting config lines.
+#      debug:
+#        var: response.config_lines
+
+#    - name: Enable NETCONF traceoptions, save config, and diffs.
+#      juniper_junos_config:
+#        load: 'merge'
+#        lines:
+#          - 'set system services netconf traceoptions flag all'
+#          - 'set system services netconf traceoptions file netconf.log'
+# This task fails for SRX100 and devices running 12.X Junos Code because it pushes set commands. Worked fine on SRX320 running 15.1X Junos code.
+#        format: 'set'
+#        retrieve: 'candidate'
+#        filter: 'system/services'
+#        comment: 'Enable NETCONF traceoptions'
+#        dest_dir: './logs/'
+#      register: response
+#    - name: Print the complete response
+#      debug:
+#        var: response
+
+#    - name: Confirm the previous commit with a commit check (but no commit)
+#      juniper_junos_config:
+#        check: true
+#        diff: false
+#        commit: false
+#     register: response
+#    - name: Print the complete response
+#      debug:
+#        var: response

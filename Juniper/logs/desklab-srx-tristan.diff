@@ -1,0 +1,6 @@
+
+[edit system services netconf]
++     traceoptions {
++         file netconf.log;
++         flag all;
++     }
